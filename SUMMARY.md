@@ -19,6 +19,6 @@
 
 ## Computer Science
 
-* [Computer Network](computer-science/untitled.md)
-* [1. 인터넷이란 무엇인가?](computer-science/1..md)
+* [Computer Network](computer-science/untitled/README.md)
+  * [1. 인터넷이란 무엇인가?](computer-science/untitled/1..md)
 
