@@ -5,7 +5,9 @@
 ## Language
 
 * [Java](language/java.md)
-* [Kotlin](language/untitled.md)
+* [Kotlin](language/untitled/README.md)
+  * [\[Kotlin 후려치기\] 1. Kotlin을 사용해야 하는 이유](language/untitled/kotlin-1.-kotlin.md)
+  * [\[Kotlin 후려치기\] 1-1. Kotlin의 탄생 배경](language/untitled/kotlin-1-1.-kotlin.md)
 * [JavaScript](language/javascript.md)
 * [Go](language/go.md)
 
@@ -13,6 +15,7 @@
 
 * [문제 해결 전략](algorithm/undefined/README.md)
   * [1. Time Complexity and Big - O Notation](algorithm/undefined/time-complexity-and-big-o-notation.md)
+  * [1-1. Master Theorem](algorithm/undefined/1-1.-master-theorem.md)
   * [2. Recursion](algorithm/undefined/2.-recursion.md)
   * [3. Divide and Conquer](algorithm/undefined/3.-divide-and-conquer.md)
 * [알고리즘 문제 풀이](algorithm/undefined-1.md)
