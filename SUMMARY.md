@@ -19,6 +19,10 @@
   * [3. Master Theorem](algorithm/undefined/1-1.-master-theorem.md)
   * [\(writing\)4. Divide and Conquer](algorithm/undefined/3.-divide-and-conquer.md)
   * [\(temp\)5. Algorithm Analysis ; Correctness Proof](algorithm/undefined/temp-5.-algorithm-analysis-correctness-proof.md)
+  * [6. Dynamic Programming - 1](algorithm/undefined/6.-dynamic-programming-1.md)
+  * [7. Dynamic Programming - 2](algorithm/undefined/7.-dynamic-programming-2.md)
+  * [8. Greedy Algorithm](algorithm/undefined/8.-greedy-algorithm.md)
+  * [9. Graph Algorithm](algorithm/undefined/9.-graph-algorithm.md)
 * [알고리즘 문제 풀이](algorithm/undefined-1.md)
 
 ## Computer Science
