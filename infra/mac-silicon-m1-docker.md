@@ -6,7 +6,7 @@
 
 ### 설치 방법
 
-사전 환경 : Homebrew 먼저 설치
+~~사전 환경 : Homebrew 먼저 설치~~
 
 ```bash
 # brew로 docker search
@@ -18,4 +18,16 @@ brew install docker
 # docker 구동 확인
 docker -v
 ```
+
+## \[2021-03-18\] docker M1 지원 시작
+
+{% embed url="https://docs.docker.com/docker-for-mac/apple-m1/" %}
+
+```bash
+# Darwin / AMD64 아키텍처 기반의 구동이 여전히 필요하기 때문에, 로제타2가 반드시 설치되어 있어야 한다.
+# 터미널에서 아래 명령줄을 실행한다.
+softwareupdate --install-rosetta
+```
+
+
 
