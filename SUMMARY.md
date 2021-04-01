@@ -40,5 +40,5 @@
 
 ## Data 제어
 
-* [Hadoop](data/hadoop.md)
+* [Hadoop 소개](data/hadoop.md)
 
