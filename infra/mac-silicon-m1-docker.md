@@ -19,7 +19,7 @@ brew install docker
 docker -v
 ```
 
-## \[2021-03-18\] docker M1 지원 시작
+## \[2021-04-01\] Docker Desktop RC 3
 
 {% embed url="https://docs.docker.com/docker-for-mac/apple-m1/" %}
 
