@@ -6,8 +6,9 @@
 
 * [Java](language/java.md)
 * [Kotlin](language/untitled/README.md)
-  * [\[Kotlin 후려치기\] 1. Kotlin을 사용해야 하는 이유](language/untitled/kotlin-1.-kotlin.md)
-  * [\[Kotlin 후려치기\] 1-1. Kotlin의 탄생 배경](language/untitled/kotlin-1-1.-kotlin.md)
+  * [\[Kotlin 후려치기\] 0. Kotlin을 사용해야 하는 이유](language/untitled/kotlin-1.-kotlin.md)
+  * [\[Kotlin 후려치기\] 0-1. Kotlin의 탄생 배경](language/untitled/kotlin-1-1.-kotlin.md)
+  * [\[Kotlin 후려치기\] 1. Kotlin 시작하기](language/untitled/kotlin-1.-kotlin-1.md)
 * [JavaScript](language/javascript.md)
 * [Go](language/go.md)
 
