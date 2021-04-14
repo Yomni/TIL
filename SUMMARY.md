@@ -9,6 +9,7 @@
   * [\[Kotlin 후려치기\] 0. Kotlin을 사용해야 하는 이유](language/untitled/kotlin-1.-kotlin.md)
   * [\[Kotlin 후려치기\] 0-1. Kotlin의 탄생 배경](language/untitled/kotlin-1-1.-kotlin.md)
   * [\[Kotlin 후려치기\] 1. Kotlin 시작하기](language/untitled/kotlin-1.-kotlin-1.md)
+  * [\[Kotlin 후려치기\] 2. Kotlin 기본기](language/untitled/kotlin-2.-kotlin.md)
 * [JavaScript](language/javascript.md)
 * [Go](language/go.md)
 
@@ -24,7 +25,8 @@
   * [7. Dynamic Programming - 2](algorithm/undefined/7.-dynamic-programming-2.md)
   * [8. Greedy Algorithm](algorithm/undefined/8.-greedy-algorithm.md)
   * [9. Graph Algorithm](algorithm/undefined/9.-graph-algorithm.md)
-* [알고리즘 문제 풀이](algorithm/undefined-1.md)
+* [알고리즘 문제 풀이](algorithm/undefined-1/README.md)
+  * [\[프로그래머스\] 두 개 뽑아서 더하기](algorithm/undefined-1/undefined.md)
 
 ## Computer Science
 
