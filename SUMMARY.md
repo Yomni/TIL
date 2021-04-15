@@ -11,7 +11,6 @@
   * [\[Kotlin 후려치기\] 1. Kotlin 시작하기](language/untitled/kotlin-1.-kotlin-1.md)
   * [\[Kotlin 후려치기\] 2. Kotlin 기본기](language/untitled/kotlin-2.-kotlin.md)
 * [JavaScript](language/javascript.md)
-* [Go](language/go.md)
 
 ## Algorithm
 
