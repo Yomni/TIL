@@ -245,6 +245,22 @@ val str = "hello $name. Your name has ${name.length} characters"
 
 ## 범위
 
+범위\(range\)는 시작하는 값과 끝나는 값 사이의 간격으로 정의된다. 비교가 가능한 타입이기만 하면 범위를 생성하는 데 사용될 수 있으며, 범위는 `..` 연산자를 사용해 생성할 수 있다.
+
+```kotlin
+val aToz = "a".."z"
+val oneToNine = 1..9
+```
+
+범위를 한번 생성하고 나면 주어진 값이 범위에 포함되는지 검사하기 위해 in 연산자를 사용할 수 있게 된다. **이것이 왜 타입을 비교할 수 있어야만 하는지에 대한 이유다.** 값이 범위에 포함되기 위해서는 시작값 이상 끝나는 값 이하여야 한다.
+
+```kotlin
+val aToz = "a".."z"
+val isTrue = "c" in aToZ // true
+val oneToNine = 1..9
+val isFalse = 11 in oneToNine // false
+```
+
 ## 루프
 
 ## 예외처리
