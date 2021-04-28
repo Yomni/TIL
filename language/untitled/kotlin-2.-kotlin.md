@@ -261,7 +261,89 @@ val oneToNine = 1..9
 val isFalse = 11 in oneToNine // false
 ```
 
+범위는 루프의 조건으로 `in`과 함께 사용가능하다.   
+그뿐 아니라 `..` 연산자로 처리할 수 없는 범위를 생성하기 위한 라이브러리 함수도 있다.
+
+```kotlin
+val coutingDown = 100.downTo(0) // 숫자를 하나씩 내리는 순으로 범위를 생성
+val rangeTo = 10.rangeTo(20) // 숫자를 하나씩 올리는 순으ㅗㄹ 범위를 생성
+```
+
+범위를 생성하고 나면 새로운 범위를 반환하는 방법으로 범위를 변경할 수 있다. step\(\) 함수를 사용하며 범위에 있는 연속적인 항의 델타 값을 변경할 수 있다.
+
+```kotlin
+val oneToFifty = 1..50 // 1 ~ 50 범위
+val oddNumbers = oneToFifty.step(2) // 1, 3, 5, 7, ... , 49
+```
+
+step\(\) 함수에 음수 값을 사용해 숫자가 감소하는 범위는 만들 수 없다.  
+reversed\(\) 함수를 사용하면 범위를 반전시킬 수 있다.
+
+```kotlin
+val coutingDownEvenNumbers = (2..100).step(2).reversed() // 100, 98, 96, ... , 2
+```
+
 ## 루프
+
+여러 언어에서 볼 수 있는 일반적인루프 구조인 `while` 루프와 `for` 루프를 지원한다.
+
+```kotlin
+while(true) {
+    println("무한 루프")
+}
+```
+
+코틀린의 for 루프는 이터레이터\(iterator\)라는 이름의 함수나 확장 함수를 정의한 객체를 반복하는 데 사용된다. 모든 컬렉션은 이 함수를 제공한다.
+
+```kotlin
+val list = listOf(1, 2, 3, 4)
+for (k in list) {
+    println(k)
+}
+
+val set = setOf(1, 2, 3, 4)
+for( k in set) {
+    println(k)
+}
+```
+
+`for` 루프 문법에서 `in` 연산자와 항상 함께 사용한다. 경우에 따라서 `연속적인 범위` 컬렉션을 지원하며, 인라인 또는 바깥에서 정의하는 것도 직접 지원한다.
+
+```kotlin
+val oneToTen = 1..10
+for (k in oneToTen) {
+    for(j in 1..5) {
+        println(k * j)
+    }
+}
+```
+
+> 범위는 컴파일러에 의해 특별한 방법으로 처리되며, JVM에서 직접 지원하는 인덱스 기반의 for 루프로 컴파일한다. 이로 인해 이터레이터 객체를 생성함으로써 발생하는 성능상의 불이익을 피할 수 있다.
+
+`for` 루프에서 사용할 수 있는 모든 객체는 객체를 매우 유연한 구조로 만들어 주는 iterator라 불리는 함수를 구현하는 것을 규정한다. 이 함수는 다음 두 함수를 제공하는 객체의 인스턴스를 반환해야 한다.
+
+* operator fun hasNext\(\) : Boolean
+* operator fun next\(\) : T
+
+컴파일러는 두 함수만 갖고 있다면, 특정 인터페이스를 강요하지 않는다.  
+예를 들어, 코틀린은 표준 String 클래스에 위에서 필요로 하는 조건을 구현한 iterator 확장 함수를 제공하기 때문에 문자열은 for 루프를 사용해 각 문자를 반복할 수 있다.
+
+```kotlin
+val string = "print my characters"
+for (char in string) {
+    println(char)
+}
+```
+
+배열은 `indices` 라는 확장 함수를 갖고 있으며, 이 함수는 배열의 인덱스를 반복하는데 사용할 수 있다.
+
+```kotlin
+for ( index in array.indices) {
+    println("Element $index is ${array[index]}")
+}
+```
+
+> 컴파일러는 배열에 대해서도 특별 지원을 하고 있으며, 컴파일러는 범위 루프와 마찬가지로 성능상의 불이익을 피하고자 배열을 일반적인 인덱스 기반의 for 루프로 컴파일한다.
 
 ## 예외처리
 
