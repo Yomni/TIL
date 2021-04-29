@@ -347,9 +347,55 @@ for ( index in array.indices) {
 
 ## 예외처리
 
+코틀린에서 모든 예외는 확인되지 않은 예외\(unchecked exception\)이다. 함수 시그니처 일부를 구성하지 않는다.
+
+확인된 예외\(checked exception\)는 반드시 메소드 시그니처 부분에 선언하거나 메소드 내부에서 다뤄야 한다.  
+Ex\) IOException 는 File 함수에서 발생한다. IO 라이브러리 곳곳에서 IOException을 선언해야 한다.
+
+확인되지 않은 예외는 메소드 시그니처에 추가할 필요가 없다.  
+Ex\) NullPointerException는 어디에서나 발생할 수 있다.
+
+```kotlin
+//sample
+fun readFile(path: Path) Unit {
+    val input = Files.newInputStream(path)
+    try {
+        var byte = input.read()
+        while(byte != -1) {
+            println(byte)
+            byte = input.read()
+        }
+    catch (e: IOException) {
+        println("Error reading from file. Error was ${e.message}")
+    } finally {
+        input.close()
+    }
+}
+```
+
 ## 클래스 인스턴스화하기
 
+코틀린에서는 생성자 함수가 클래스명을 사용함으로써 생성자 함수 호출을 일반 함수를 호출하는 것과 똑같이 처리한다. 인자는 자바와 동일하게 전달 할 수 있다.
+
+```kotlin
+val file = File("/etc/nginx/nginx.conf")
+val date = BigDecimal(100)
+```
+
 ## 참조 동등성과 구조 동등성
+
+* 참조 동등성 : 두 개의 각기 다른 참조가 메모리상에서 정확하게 같은 인스턴스를 가리키고 있는 경우
+* 구조 동등성 :  메모리상에서 두 객체는 각기 다른 인스턴스이지만 같은 값을 갖고 있는 경우
+
+두 참조가 같은 인스턴스를 가리키는지를 확인하기 위해서는 `===` 연산자\(삼중 일치\)나 같지 않은 경우를 확인하는 `!==` 연산자를 사용한다.
+
+```kotlin
+val a = File("/mobydick.doc")
+val b = File("/mobydick.doc")
+val sameRef = a === b // false : 각기 다른 File 객체 인스턴스이기 때문에
+```
+
+
 
 ## this 표현식
 
