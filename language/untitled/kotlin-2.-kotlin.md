@@ -657,12 +657,81 @@ fun startsWithFoo(any: Any): Boolean {
 두 번째 형태는 인자 없이 사용되며, if...else 절을 대체하게 된다.
 
 ```kotlin
-fun
+fun whenWithoutArgs(x: Int, y: Int) {
+    when {
+        x < y -> println("x is less than y")
+        x > y -> println("is greater then y")
+        else -> println("x must equal y")
+    }
+}
 ```
 
 ## 함수 반환
 
+기본적으로, 가장 가까운 닫히는 함수나 익명 함수로부터 return을 반환한다. 중첩 함수인 경우, 가장 안쪽에 있는 함수에서만 반환이 이뤄질 것이다.
+
+```kotlin
+fun largestNumber(a: Int, b: Int, c: Int): Int {
+    fun largest(a: Int, b: Int): Int {
+        if( a > b ) return a
+        else return b
+    }
+    return largest(largest(a, b), largest(b, c))
+}
+```
+
+만약 클로저로부터 값을 반환해야만 한다면, 반환할 때 레이블로 단서를 달아야 한다. 그렇지 않으면, 이는 외부 함수를 위한 반환이 될 것이다. 레이블은 @로 끝나는 단순한 문자열이다. 
+
+암시적 레이블이 사용되는 경우에는 레이블을 명시하지 않아도 된다. 암시적 레이블은 클로저를 받아들이는 함수명이다. 레이블을 정의할 경우에는 암시적 레이블은 보장되지 않는다. 
+
+```kotlin
+fun printUntilStop() {
+    val list = listOf("a","b","stop","c")
+    list.forEach{
+        if (it == "stop") return
+        else println(it)
+    }
+}
+// a
+// b
+
+fun printUntilStop() {
+    val list = listOf("a","b","stop","c")
+    list.forEach stop@{
+        if (it == "stop") return@stop
+        else println(it)
+    }
+}
+// a
+// b
+// c
+
+// 암시적 레이블
+fun printUntilStop() {
+    val list = listOf("a","b","stop","c")
+    list.forEach {
+        if (it == "stop") return@forEach
+        else println(it)
+    }
+}
+// a
+// b
+// c
+```
+
 ## 타입 체계
 
-## 요약
+### Any 타입
+
+코틀린에서 최상위 타입은 Any 타입이다. 자바에서의 Object 타입과 유사하다. Any 타입에서는 toString, hashCode, equals 메소드를 정의하고 있으며, apply, let, to 같은 확장 함수를 정의하고 있다.
+
+### Unit 타입
+
+unit 타입은 자바의 void와 유사하다. 유닛은 싱글톤\(singleton\) 인스턴스와 함께 적절한 타입으로, Unit 이나 \(\) 로 나타낸다. 함수가 유닛을 반환하도록 정의되어 있다면, 이 함수는 싱글톤 유닛 인스턴스를 반환할 것이다.
+
+### Nothing
+
+값을 지니지 않는 타입\(bottom type\)인 Nothing 은 자바와 코틀린의 가장 큰 차이 중에 하나이다. **Nothing은 인스턴스를 갖고 있지 않다.** Any가 모든 타입의 슈퍼클래스인 것과 비슷하게 Nothing은 모든 타입의 서브클래스다.
+
+Nothing은 컴파일러에 함수가 정상적으로 끝나지 않는다는 사실을 알리는 데 사용된다. 루프가 계속해서 도는 경우나 항상 예외를 던지는 경우다. 또 다른 예로는 비어 있는 불변 컬렉션이 있다. 비어 있는 Nothing 리스트는 문자열 리스트를 제외한 참조에 할당될 수 있으며, 리스트는 불변이기 때문에, 이러한 리스트에 문자열이 추가될 위험이 없다. 그러므로 이러한 빈 리스트 값은 캐시되거나 재사용될 수 있다. 이는 실제로 emptyList\(\)나 emptySet\(\) 같은 표준 라이브러리 함수 구현의 기본이 된다.
 
