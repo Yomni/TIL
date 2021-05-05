@@ -443,25 +443,222 @@ this는 가장 가까이에 갖고 있는 클래스를 참조 후 라벨로 바�
 
 ## 가시성 제어자
 
-### private
+일반적으로 모든 함수나 클래스가 퍼블릭 API의 일부분으로 설계되지는 않는다. 몇몇 코드의 일부분을 내부 코드로 지정해 클래스나 패키지 바깥에서 접근하지 못하게 하는 것이 바람직하다. 이를 명시하기 위해 사용하는 키워드를 가시성 제어자라\(visibility modifiers\) 부른다.  
+자바에서의 접근 제한자와 같은 역할을 수행한다. 
 
-### protected
+| 가시성 제어자 | 접근 범위 |
+| :--- | :--- |
+| **public** | 제한 없음 |
+| **protected** | 자신과 상속하는 대상만 허용 |
+| **private** | 클래스 내부에서만 허용 |
+| **internal** | 같은 모듈 내에서 public으로 동작 |
 
-### internal
+특히, internal의 경우 생소한 키워드일 수 있다. 같은 모듈은 다음과 같다.
+
+1. 메이븐\(maven\) 모듈
+2. 그레이들\(gradle\) 모듈
+3. intellij 모듈
+4. ant 태스크 내의 같이 컴파일 되는 파일
+
+```kotlin
+class Person {
+    private var name = "tempName"
+    protected fun age(): Int = 21
+    internal class SubPerson {
+    }
+    
+    public val age = 22
+}
+```
 
 ## 표현식으로서의 흐름 제어
 
+**표현식\(Expression\)은 값을 평가하는 구문**이다. 다음 표현식은 true를 평가한다.
+
+```kotlin
+"hello".startsWith("h")
+```
+
+반면에, **구문\(Statement\)은 결과 값을 반환**하지 않는다.
+
+```kotlin
+// 아래 구문은 변수에 값을 대입하는 구문이지만, 자기 자신에 대해 어떠한 것도 평가하지 않는다
+val a = 1
+```
+
+**자바에서** **if...else 와 try...catch** 같은 일반적인 흐름 제어 블록은 **구문\(Statement\)**이다.
+
+**코틀린**에서 **if...else 와 try...catch** 같은 일반적인 흐름 제어 블록은 **표현식\(Expression\)**이다.  
+따라서 결과를 값에 직접 대입할 수 있으며, 함수로부터 반환할 수도 있으며, 다른 함수에 인자로 전달할 수도 있다.
+
+* 보일러플레이트 코드가 줄어든다.
+* 코드를 더욱 읽기 쉽게 해준다.
+* 값이 변경 가능한 변수의 사용을 피하게 해준다.
+* if문 밖에서 변수를 선언하고 각 분기 내부에서 초기화하는 일반적인 사용 방법을 완전히 피할 수 있게 해준다.
+
+```kotlin
+val date = Date()
+val today = if (date.year == 2016) true else false
+
+fun isZero(x: Int): Boolean {
+    return if (x == 0) true else false
+}
+
+// try ... catch 표현식을 사용한 ㅈ
+val success = try {
+    readFile()
+    true
+} catch ( e: IOException) {
+    false
+}
+```
+
 ## 널 문법
+
+코틀린은 널 참조에 대해 일반적인 실수를 좀 더 쉽게 피할 수 있는 기능을 몇 가지 제공하고 있다.
+
+```kotlin
+//코틀린은 널 값을 지정할 수 있는 변수는 ?와 함께 선언할 것을 요구한다
+var str: String? = null
+```
+
+### Any 타입
+
+자바에서 object 클래스와 같은 역할을 한다. Any 클래스는 모든 인스턴스의 최상위 타입이다.
+
+### is 연산자
+
+자바의 instanceof 연산자와 같은 역할이다. true / false 값을 리턴한다
+
+```kotlin
+fun isString(input: Any): Boolean {
+    return (input is String) 
+}
+```
 
 ### 똑똑한 형변환
 
+코틀린 컴파일러는 사용자를 대신해 타입을 확인했음을 기억해 암시적으로 참조를 더욱 구체적인 타입으로 형변환 한다. 이를 똑똑한 형병환\(smart cast\)이라고 한다. 
+
+똑똑한 형변환에서 사용할 수 있는 변수는 변수를 검사한 시점부터 변수를 사용하는 시점 동안 값이 변하지 않음을 컴파일러가 보장할 수 있는 변수로 제한된다.\(따라서 닫히거나 변경이 되는 var 필드와 로컬 변수\(새로운 값을 할당하는 익명 함수에서 사용하는\)는 똑똑한 형변환에 사용할 수 없음을 의미한다.
+
+```kotlin
+fun printStringLength(any: Any) {
+    if (any is String) {
+        // smart cast
+        println(any.length)
+    }
+}
+
+// 심지어 왼쪽에서 타입을 검사하는 경우, 지연 연산되는 불리언 연산자의 오른쪽에서 동작하기도 한다
+fun isEmptyString(any: Any): Boolean {
+    return any is String && any.length == 0
+}
+
+// 문자열을 갖고 있지 않은지, 혹은 갖고 있다면 문자열이 비어있는지 확인
+fun isNotStringOrEmpty(any: Any): Boolean {
+    return any !is String || any.length == 0
+}
+```
+
 ### 명시적 형변환
+
+어떠한 참조를 타입으로 형변환하는데 이를 명시적으로 하기 위해서는 `as` 연산자를 사용한다. 형변환을 정상적으로 수행할 수 없다면 이 연산자는 `ClassCastException` 을 발생시킬 것이다.
+
+```kotlin
+fun length(any: Any): Int {
+    val string = any as String
+    return string.length
+}
+
+// 값이 널인 경우 예외 발생, 널 값이 가능한 값으로 형변환 하기 위해서는 널 값이 가능한 타입으로 선언
+val string: String? = any as String
+```
+
+형변환이 실패하면 ClassCastException이 발생한다. 예외를 피하거나, 형변환에 실패했을 경우 널 값을 대신 전달받고자 할 경우 안전한 형변환 연산자인 `as?` 를 사용할 수 있다. 이 연산자는 타깃 타입이 호환이 되는 타입인 경우에는 형변환된 값을 반환할 것이며, 그렇지 않은 경우에는 널 값을 반환할 것이다.
+
+```kotlin
+val any = "/home/users"
+val string: String? = any as? String // String으로 형변환 된다.
+val file: File? = any as? File
+```
 
 ## when 표현식
 
+when 표현식은 구문이 아니므로 평가의 대상이 된다. switch 구문을 대신해서 사용이 가능하다.
+
 ### when\(값\)
 
-#### 인자가 없는 when
+when 은 switch 문의 일반적인 사용법과 유사하며, 컴파일러는 마지막 분기가 else가 되도록 강제한다는 점에 주목해야 한다.
+
+```kotlin
+fun whatNumber(x: Int) {
+    when (x) {
+        0 -> println("x is zero")
+        1 -> println("x is 1")
+        else -> println("x is neither 0 nor 1")
+    }
+}
+
+// when은 표현식이므로 평가한 결과 값은 반환되는 결과값으로 동작한다.
+fun isMinOrMax(x: Int): Boolean {
+    val isZero = when (x) {
+        Int.MIN_VALUE -> true
+        Int.MAX_VALUE -> true
+        else -> false
+    }
+    return isZero
+}
+
+// 분기 코드가 같은 경우에는 상수를 함께 묶을 수도 있다. 상수 구분은 콤마를 사용한다
+fun isZeroOrOne(x: Int): Boolean {
+    return when(x) {
+        0, 1 -> true
+        else -> false
+    }
+}
+
+// 각 조건에 상수가 아니어도 동작 가능하다
+fun isAbs(x: Int): Boolean {
+    return when (x) {
+        Math.abs(x) -> true
+        else -> false
+    }
+}
+
+// 범위 연산자도 지원한다. in 연산자를 사용해 값이 범위 안에 포함되어 있는지 확인할 수 있으며,
+// 만약 포함되어 있다면 해당 조건은 true로 평가된다.
+fun isSingleDigit(x: Int): Boolean {
+    return when (x) {
+        in -9..9 -> true
+        else -> false
+    }
+}
+
+// 컬렉션 안에 값이 존재하는지를 확인할 때도 in을 사용할 수 있다.
+fun isDieNumber(x: Int): Boolean {
+    return when (x) {
+        in listOf(1,2,3,4,5,6) -> true
+        else -> false
+    }
+}
+
+// 똑똑한 형변환도 사용할 수 있다.
+fun startsWithFoo(any: Any): Boolean {
+    return when (any) {
+        is String -> any.startsWith("Foo")
+        else -> false
+    }
+}
+```
+
+### 인자가 없는 when
+
+두 번째 형태는 인자 없이 사용되며, if...else 절을 대체하게 된다.
+
+```kotlin
+fun
+```
 
 ## 함수 반환
 
