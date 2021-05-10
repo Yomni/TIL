@@ -32,6 +32,7 @@
 * [알고리즘 문제 풀이](algorithm/undefined-1/README.md)
   * [\[프로그래머스\] 두 개 뽑아서 더하기](algorithm/undefined-1/undefined.md)
   * [\[프로그래머스\] 크레인 인형뽑기 게임](algorithm/undefined-1/undefined-1.md)
+  * [\[프로그래머스\] 내적](algorithm/undefined-1/undefined-3.md)
 
 ## Computer Science
 
