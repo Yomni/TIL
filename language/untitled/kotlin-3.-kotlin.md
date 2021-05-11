@@ -17,6 +17,8 @@ description: '고차 함수, 람다식, 객체 지향 프로그래밍 언어 로
 코틀린은 위 내용을 모두 지원하면서도 OOP 언어의 세 가지 기둥인
 
 * **캡슐화\(encapsulation\)** : 연관된 필드와 메소드 그룹을 객체로 다룬다
+  * 캡슐화를 통해 각 클래스는 **신중하고 독립적으로 유지**
+  * 이를 사용하는 다른 코드가 계약 조건을 유지하는 동안에는 해당 코드에 영향을 주지 않으면서 자신의 구현을 변경할 수 있다.
 * **상속\(inheritance\)** : 이미 존재하는 클래스로부터 새로운 클래스를 생성할 수 있다
 * **다형성\(polymorphism\)** : 각 클래스마다 자신의 메소드를 다르게 구현했음에도 각기 다른 클래스를 상호 교환하면서 사용할 수 있다
 
@@ -40,7 +42,70 @@ OOP 추상화는 대규모 코드에서 발생할 수 있는 문제를 완화하
 
 ## 클래스
 
-### 접근 레벨
+_클래스는 객체의 청사진으로, 타입의 데이터와 행위를 나타낸다_
+
+```kotlin
+class Deposit {
+    // 필드
+    // 프로퍼티
+    // 메소드
+}
+```
+
+* 자바와는 달리 하나의 소스파일 내에서 여러 개의 클래스를 정의할 수 있다.
+* 접근레벨은 class 키워드 앞에 명시할 수 있으며, default 값은 public 이다.
+* 생성자는 명시하지 않을 경우 컴파일러에서 자동으로 만들어 준 빈 생성자를 갖고 있다.
+* new 키워드는 사용하지 않는다
+* 주 생성자의 인자는 '**프로퍼티**'이다\(**필드가 아님**\)
+* 생성자에 직접 접근하는 것을 원치 않는 경우
+  * private : 일반적인 싱글톤 디자인에서 많이 쓰임 \(getInstance\(\) 메소드를 구현하여 유일한 인스턴스 반환\)
+  * protected : 추상 클래스를 정의하는 경우 --&gt; 파생된 클래스에서만 생성자를 호출
+  * internal : 모듈 로직에서 사용
+
+```kotlin
+// 별도의 주 생성자를 선언하는 법
+class Person constructor(val firstName: String, val lastName: String, val age: Int?) {
+}
+
+// 주 생성자가 코드를 가지는 방법 --> init 블록으로 지정
+class Person constructor(val firstName: String, val lastName: String, val age: Int?) {
+    // 표현식이 false일 경우 --> IllegalArgumentException을 발생시킨다
+    init {
+        require(firstName.trim().length > 0) {"Invalid firsntName argument."}
+        require(lastName.trim().length > 0) {"Invalid lastName argument."}
+        if (age != null) {
+            require(age >= 0 && age < 150) { "Invalid age argument." }
+        }
+    }
+    
+    // 두번째 생성자 선언
+    // this를 통해 주 생성자 호출
+    constructor(firstName: String, lastName: String) : this(firstName, lastName, null)
+}
+
+// 생성자 인자에 접두사로 val 이나 var를 반드시 붙일 필요는 없다. 만약 게터(getter)나
+// var를 사용하는 경우에는 세터(setter) 메소드가 필요 없는 경우에는 항상 다음과 같이 할 수도 있다.
+// 아래의 경우 getName() 과 getAge() 메소드만 게터(getter)로 사용
+class Person2(firstName: String, lastName: String, howOld: Int?) {
+    private val name: String
+    private val age: Int?
+    
+    init {
+        this.name = "$firstName,$lastName"
+        this.age = howOld
+    }
+    
+    fun getName(): String = this.name
+    
+    fun getAge(): Int? = this.age
+}
+
+```
+
+> 클래스와 객체
+>
+> * 클래스 : 객체의 정의를 그린 일종의 청사진
+> * 객체 : 클래스 정의에 대한 런타임 인스턴스
 
 ### 중첩 클래스
 
