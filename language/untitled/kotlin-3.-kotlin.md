@@ -109,9 +109,125 @@ class Person2(firstName: String, lastName: String, howOld: Int?) {
 
 ### 중첩 클래스
 
+중첩 클래스 : 다른 클래스 몸체 내부에 클래스를 생성하는 개념
+
+```kotlin
+class OuterClassName {
+    class NestedClassName {
+    }
+}
+```
+
+* 중첩클래스에도 접근레벨 설정 가능
+  * private : 내부 중첩 클래스의 객체는 OuterClassName 스코프 내부에서만 생성 가능
+  * internal : 모듈 내부에서만 생성 가능
+  * protected : OuterClassName으로 파생된 클래스는 중첩 클래스 객체 생성 가능
+* 정적 클래스 / 비정적 클래스 형태의 중첩 클래스 생성 가능
+  * static class % : 정적 중첩 클래스\(static nested class\)
+    * 외부 클래스의 static 멤버로만 접근 가능
+  * class % : 내부 클래스\(inner class\) 
+    * 외부 클래스 멤버가 private로 선언되어 있어도 내부 클래스에서 접근 가능
+    * 내부 클래스의 인스턴스를 생성하기 위해서 Outer 클래스의 인스턴스가 필요하다
+* 중첩 클래스는 해당 클래스를 둘러싼 클래스의 멤버로 간주
+
+```kotlin
+// 정적 중첩 클래스와 유사한 클래스를 코틀린에서 생성
+class BasicGraph(val name: String) {
+    class Line(val x1: Int, val y1: Int, val x2: Int, val y2: Int) {
+        fun draw(): Unit {
+            println("Drawing Line from ($x1:$y1) to ($x2:$y2)")
+        }
+    }
+    
+    fun draw() {
+        println("Drawing the graph $name")
+    }
+}
+
+val line = BasicGraph.Line(1,0,-2,0)
+line.draw() // Drawing Line from (1:0) to (-2:0)
+```
+
+private의 멤버를 내부에서 접근하기 위해선, 내부 클래스 앞에 inner 키워드를 추가해 Line 클래스를 내부 클래스\(inner\)로 만들면 된다.
+
+```kotlin
+class BasicGraph(graphName: String) {
+    private val name: String
+    
+    init {
+        name = graphName
+    }
+    
+    inner class InnerLine(val x1: Int, val y1: Int, val x2: Int, val y2: Int) {
+        fun draw(): Unit {
+            println("Drawing Line from ($x1:$y1) to ($x2:$y2) for graph $name")
+        }
+    }
+    
+    fun draw() {
+        println("Drawing the graph $name")
+    }
+}
+
+val graph = BasicGraph("sample graph")
+val line = graph.InnerLine(1,0,-2,0)
+line.draw() // Drawing Line from (1:0) to (-2:0) for graph sample graph
+```
+
+this 보다 더 강력한 this@label을 이용하여 명확하게 참조
+
+```kotlin
+fun main() {
+	val a = A()
+    a.B().foo("test")
+}
+
+
+class A {
+    private val somefield: Int = 1
+    inner class B {
+        private val somefield: Int = 2
+        fun foo (s: String) {
+            println("Field <somefield> from B" + this.somefield) // 2
+            println("Field <somefield> from B" + this@B.somefield) // 2
+            println("Field <somefield> from A" + this@A.somefield) // 1
+        }
+    }
+}
+```
+
+UI 코드 작업 시 UI 컴포넌트\(리스트 박스 or 버튼 등등..\)에서 발생하는 각기 다른 이벤트를 제어하기 위해 이벤트 핸들러를 제공해야 하는 상황이 있다.
+
+UI 프레임워크에서는 사용자가 클래스의 인스턴스를 제공하기를 기대한다. 사용자는 이러한 리스터 클래스에서 바깥 클래스 스코프에 있는 몇몇 상태에 접근하고 싶을 것이다. 결국 사용자는 다음 예제에서와 같이 버튼의 클릭수를 세기 위해 익명의 내부 클래스를 제공하게 될 것이다.
+
+```kotlin
+class Controller {
+    private var clicks: Int = 0
+    fun enableHook() {
+        button.addMouseListener(object : MouseAdapter() {
+            override fun mouseClicked(e: MouseEvent) {
+                clicks++
+            }
+        })
+    }
+}
+```
+
+UI 버튼에 대한 참조가 있고 마우스 이벤트를 위해 enableHook 콜백을 추가했음을 짐작할 수 있다. 버튼을 클릭할 때마다 clicks 필드 값을 증가시킬 것이다.
+
 ### 데이터 클래스
 
+데이터를 저장하기 위한 목적으로 클래스를 정의하는 경우는 빈번하게 발생한다. ; 스칼라의 케이스 클래스\(case class\)
+
+kotlin에서는 데이터 클래스\(data class\)라는 이름으로 이와 유사한 개념을 제공한다.
+
+```kotlin
+data class Customer(val id: Int, val name: String, var address: String)
+```
+
 ### 열거형 클래스
+
+
 
 ### 정적 메소드와 컴패니언 오브젝트 
 
