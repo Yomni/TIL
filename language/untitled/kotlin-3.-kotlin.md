@@ -2,7 +2,7 @@
 description: '고차 함수, 람다식, 객체 지향 프로그래밍 언어 로서의 코틀린의 특성'
 ---
 
-# \[Kotlin 후려치기\] 3. Kotlin 코틀린과 객체 지향 프로그래밍
+# \[Kotlin 후려치기\] 3. Kotlin 과 객체 지향 프로그래밍\(Object - Oriented Programming\)
 
 ## 객체 지향적인 언어로서의 코틀린
 
@@ -227,21 +227,226 @@ data class Customer(val id: Int, val name: String, var address: String)
 
 ### 열거형 클래스
 
+열거형 클래스의 구체적인 타입으로, 주어진 enum 타입 변수는 미리 정의된 상수로 제한된다. 상수는 타입에 의해 정의되어 있다.
 
+```kotlin
+// 일반적인 enum 타입 클래스
+enum class Day { MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY }
+
+// 생성자를 매개변수로 가지는 enum 타입 클래스 
+// 일종의 Planet 이름을 Key, (mass, radius)를 value로 가지는 Map 
+enum class Planet(val mass: Double, val radius: Double) {
+    MERCURY(3.303e+23, 2.4397e6), VENUS(4.869e+24, 6.0518e6)
+}
+
+// 사용하기 위해선 다음과 같이 사용한다
+Planet.valueOf("MERCURY") // MERCURY
+Planet.valueOf("MERCURY").mass // 3.303e+23
+Planet.valueOf("MERCURY").radius // 2.4397e6
+// 정의한 모든 값을 얻는 방법
+Planet.values() // Array<Planet> return
+
+// enum과 interface 를 익명으로 구현할 수 있다
+public enum class Word : Printable {
+    HELLO {
+        override fun print() {
+            println("Word is HELLO")
+        }
+    },
+    BYE {
+        override fun print() {
+            println("Word is BYE")
+        }
+    }
+}
+
+val w = Word.HELLO
+w.print()
+```
 
 ### 정적 메소드와 컴패니언 오브젝트 
 
+* 코틀린은 자바와 달리 클래스를 위한 정적 메소드를 지원하지 않는다
+* 정적 메소드는 객체 인스턴스에 속해 있는 것이 아니라, 타입 자신에 속해 있다\(객체를 만들지 않고도 사용 가능하다\)
+* 코틀린에서 정적 메소드 기능을 구현하기 위해서는 메소드를 패키지 레벨에 정의하는 것이 바람직하다 \(파일을 Static 으로 명명\)
+
+```kotlin
+fun showFirstCharacter(input: String): Char {
+    if(input.isEmpty()) throw IllegalAccessException()
+    return input.first()
+}
+
+// static method 처럼 사용 할 수 있다
+showFirstCharacter("Test String") // T
+```
+
+이런 소스의 사용이 가능하게 하는 메커니즘의 핵심은 다음과 같다.
+
+* 컴파일러는 실제로 public final 의 키워드를 가지는 클래스를 패키지.파일명으로 생성한다.
+* 정의한 메소드를 컴파일러가 생성한 클래스의 static 메소드로 추가한다.
+* 특히, [invokestatic](https://stackoverflow.com/questions/34360718/invokestatic-on-static-method-in-interface) 루틴을 통해 만들어진다.
+
+이런 특징을 이용해서 싱글톤 패턴을 쉽게 정의할 수 있다.
+
+```kotlin
+object Sigleton {
+    private var count = 0
+    fun doSomething(): Unit {
+        println("Calling a doSomething (${++count} call/-s in total)")
+    }
+}
+```
+
+* 위 코드는 모든 함수에서 Singleton.doSomething 메소드를 호출할 수 있다
+* 호출할 때마다 카운터 값이 증가한다.
+* 컴파일러는 내부적으로 위 코드를 public final 클래스로 생성한다
+* INSTANCE라고 부르는 멤버를 하나 도입하고 이를 static으로 지정한다.
+* 특히, static{} 코드를 임의로 추가하며, 이는 초기화\(initializer\)로 오직 한 번만 호출되며, 다음과 같은 동작 전에 static{} 코드 부분이 먼저 호출된다.
+  * 클래스 인스턴스 생성
+  * 클래스 정적 메소드 호출
+  * 클래스 정적 필드에 값 할당
+  * 비상수\(non-constant\) 정적 필드 사용
+  * 최상위 클래스를 위해 클래스 내부에서 어휘적으로 중첩된 assert 문 실행
+
+코틀린에서도 자바에서 호출하는 것처럼 정적 메소드를 호출하는 방법이 있다. 이를 위해, 객체를 클래스 안에 위치시킨 다음 이를 컴패니언 오브젝트\(companion object\)로 지정해야 한다. 
+
+```kotlin
+interface StudentFactory {
+    fun create(name:String): Student
+}
+
+class Student private constructor(val name: String) {
+    // 일종의 static method를 호출하는 방법
+    companion object : StudentFactory {
+        override fun create(name: String): Student {
+            return Student(name)
+        }
+    }
+}
+```
+
+* Student 타입의 생성자는 private로 지정되어 있음
+  * 생성자는 Student 클래스 내부나 companion object를 제외한 어느 곳에서도 생성자를 호출할 수 없다
+* companion 클래스는 Student의 모든 메소드와 멤버에 접근할 수 있다. 
+
 ## 인터페이스
 
-## 상속
+* 연관된 기능의 집합에 대한 정의 ; 일종의 계약
+* 인터페이스를 구현하는 쪽은 약속된 인터페이스를 준수하고 필요한 메소드를 반드시 구현해야 한다
+* 추상 메소드를 선언 / 메소드 구현체 를 가질 수 있다
+* **상태는 가질 수 없으나, 프로퍼티는 가질 수 있다\(추상 클래스와의 차이\)**
+
+```kotlin
+interface Document {
+    // 프로퍼티 
+    val version: Long
+    val size: Long
+    
+    // 프로퍼티 이지만 기본 구현 제공
+    val name: String
+    get() = "NoName"
+    
+    fun save(input: InputStream)
+    fun load(stream: OutputStream)
+    // 기본 구현
+    fun getDescription(): String {return "Document $name has $size byte(-s)"}
+}
+
+
+class DocumentImpl : Document {
+    override val size : Long
+    get() = 0
+    
+    override fun load(stream: OutputStream) {
+        
+    }
+    
+    override fun save(input: InputStream) {
+        
+    }
+    
+    override val version: Long
+    get() = 0
+    
+}
+```
+
+## 상속\(Inheritance\)
+
+_**객체지향 프로그래밍의 핵심 중 하나**_
+
+* 기존 클래스를 재활용 또는 확장해 행위를 수정한 새로운 클래스를 생성
+* 이 때, 기존 클래스를 슈퍼 클래스\(또는 부모 클래스\), 새로 생성한 클래스를 파생된\(derived\) 클래스라 부른다
+* 슈퍼클래스는의 상속은 한 번만 가능, 인터페이스는 여러 개 상속 가능
+* C가 B로부터 파생된 클래스이고, B는 A로부터 파생된 클래스라면, C는 A로 부터 파생된 클래스이다\(~~삼단 논법~~\)
+* 슈퍼 클래스의 모든 필드와 프로퍼티를 받게 된다
+
+### 상속의 의의
+
+* 재사용성 극대화 \(슈퍼클래스의 필드와 프로퍼티를 모두 받을 수 있으므로\)
+* 상속을 통한 파생된 클래스의 전문화 \(슈퍼 클래스에 비해 좀 더 세분화 되고 확장된 개념으로 정의\) 
 
 ## 가시성 제어자
 
+* public : 모든 곳에서 접근 가능
+* internal : 모듈 코드에서만 접근 가능
+* protected : 정의한 클래스 및 파생된 클래스에서만 접근 가능
+* private : 정의한 클래스 스코프 내에서만 접근할 수 있음
+
 ## 추상 클래스
 
-## 인터페이스 또는 추상 클래스
+_**derived class가 공유하는 공통된 메소드 및 프로퍼티 집합을 제공하기 위한 부분적으로 정의된 클래스  
+ex\) InputStream 클래스**_
 
-## 다형성
+* 클래스 정의부 앞에 `abstract` 키워드를 추가하여 정의 가능 
+* 구현부가 없는 프로퍼티와 메소드는 파생된 클래스에서 반드시 구현
+* 추상 클래스는 인스턴스를 생성할 수 없음
+
+```kotlin
+abstract class A {
+    // derived class에서 반드시 구현
+    abstract fun doSomething()
+}
+```
+
+## 인터페이스 vs 추상 클래스
+
+* Is-a : 'B는 A 이다.'의 관계가 성립하지 않는다면, 인터페이스로 구현
+* Can-Do : 인터페이스는 Can-Do 관계를 의미한다
+
+ex\) OutputStream : 추상 클래스, FileOutputStream, ByteOutputStream : 파생된 클래스  
+Autocloseable : interface
+
+## 다형성\(Polymorphism\)
+
+캡슐화, 상속에 이어 객체 지향 프로그래밍의 세번째 특징 ; 타입 단계에서 '어떻게'로부터 '무엇을'을 분리한다.
+
+_**한 타입의 참조 변수로 여러 타입의 객체를 참조할 수 있도록 한다.**_  
+따라서 다음과 같은 식의 코딩이 가능하다.
+
+```kotlin
+// Ellipsis / Rectangle 모두 Shape 라는 클래스를 상속하고 있다고 가정
+fun main(args: Array<String>) {
+    val e1 = Ellipsis()
+    e1.Height = 10
+    e1.Width = 12
+    
+	val e2 = Ellipsis()
+    e2.Height = 100
+    e2.Width = 96
+
+    val r1 = Rectangle()
+    r1.XLocation = 49
+    r1.YLocation = 45
+    r1.Width = 10
+    r1.Height = 10
+    
+    val shapes = listOf<Shape>(e1,e2,r1)
+    // 각각의 실제 구현체에 따라 isHit 내부의 로직이 다르게 동작할 수 있다.
+    // 다형성을 통해 이는 shape의 참조 변수로만 접근하면 된다.
+    val selected:Shape? = shapes.firstOrNull{ shape -> shape.isHit(50,52) }
+}
+```
 
 ## 오버라이딩 규칙
 

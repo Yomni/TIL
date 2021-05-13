@@ -9,7 +9,8 @@
   * [\[Kotlin 후려치기\] 0-1. Kotlin의 탄생 배경](language/untitled/kotlin-1-1.-kotlin.md)
   * [\[Kotlin 후려치기\] 1. Kotlin 시작하기](language/untitled/kotlin-1.-kotlin-1.md)
   * [\[Kotlin 후려치기\] 2. Kotlin 기본기](language/untitled/kotlin-2.-kotlin.md)
-  * [\[Kotlin 후려치기\] 3. Kotlin 코틀린과 객체 지향 프로그래밍](language/untitled/kotlin-3.-kotlin.md)
+  * [\[Kotlin 후려치기\] 3. Kotlin 과 객체 지향 프로그래밍\(Object - Oriented Programming\)](language/untitled/kotlin-3.-kotlin.md)
+  * [\[Kotlin 후려치기\] 4. Kotlin과 함수](language/untitled/kotlin-4.-kotlin.md)
 * [JavaScript](language/javascript.md)
 * [Java](language/java.md)
 
