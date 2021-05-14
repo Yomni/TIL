@@ -450,6 +450,27 @@ fun main(args: Array<String>) {
 
 ## 오버라이딩 규칙
 
+오버라이딩\(overriding\) : 새로운 클래스에서 부모 클래스로부터 상속받은 메소드 중 재정의 하는 것
+
+코틀린은 일반적으로 자바보다 더 명시적인 언어이고, 자바에서 모든 메소드는 기본적으로 가상 메소드이다. 그러므로 모든 파생된 클래스에서는 오버라이딩 할 수 있다.  
+반면에 코틀린에서는 함수를 재정의하기 위해 함수가 오버라이딩에 대해 열려\(open\)있다는 것을 표시해야 한다. 이를 위해 메소드 정의부에 접두사로 `open` 키워드를 추가해야 하며, 메소드를 재정의할 때에는 꼭 `override` 키워드를 메소드에 표시해야 한다
+
+```kotlin
+abstract class SingleEngineAirplane protected constructor() {
+    abstract fun fly()
+}
+
+class CesnaAirplane : SingleEngineAirplane() {
+    /*
+     * 메소드 앞에 final 키워드를 추가하면 파생된 클래스에서 오버라이딩 하는 것을
+     * 항상 허용하지 않도록 할수 있다.
+     */
+    final override fun fly() {
+        println("Flying a cesna")
+    }
+}
+```
+
 ## 상속 대 합성
 
 ## 클래스 델리게이션
