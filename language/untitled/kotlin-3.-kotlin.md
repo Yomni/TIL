@@ -471,6 +471,38 @@ class CesnaAirplane : SingleEngineAirplane() {
 }
 ```
 
+* 함수에만 국한된 것이 아니라 프로퍼티도 가상으로 표시할 수 있고, 오버라이딩 할 수 있다
+
+```kotlin
+open class Base {
+    open val property1: String
+        get() = "Base::value"
+}
+
+class Derived1 : Base() {
+    override val property1: String
+        get() = "Derived::value"
+}
+
+class Derived2(override val property1: String) : Base() {}
+```
+
+* val 프로퍼티를 var로도 오버라이딩할 수 있지만, 역은 성립하지 않는다
+
+```kotlin
+open class BaseB(open val propertyFoo:String) {
+}
+
+class DerivedB : BaseB("") {
+    private var _propFoo: String = ""
+    override var propertyFoo: String
+        get() = _propFoo
+        set(value) {
+            _propFoo = value
+        }
+}
+```
+
 ## 상속 대 합성
 
 ## 클래스 델리게이션
