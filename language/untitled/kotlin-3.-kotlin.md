@@ -533,6 +533,8 @@ fun main(args: Array<String>) {
 
 ## 상속 대 합성
 
+
+
 ## 클래스 델리게이션
 
 ## 봉인 클래스
