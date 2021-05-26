@@ -16,7 +16,8 @@
 
 ## Framework
 
-* [Spring Framework](framework/spring.md)
+* [Spring Framework](framework/spring/README.md)
+  * [1. 스프링과 웹 애플리케이션](framework/spring/1..md)
 
 ## Algorithm
 
