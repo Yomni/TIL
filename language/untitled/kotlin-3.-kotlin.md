@@ -533,11 +533,48 @@ fun main(args: Array<String>) {
 
 ## 상속 대 합성
 
-
+* 연관 관계\(Association ; Has - a 관계\) : 이미 존재하는 기능을 재사용해 새로운 클래스를 키우는 개념 ex\) Desktop은 HardDisk를 가지고\(Has-a\) 있다.
+  * 연관 관계의 두 가지 특성
+    * 집합\(Aggregation\) 타입 : 각 객체가 자신만의 생명주기를 갖는 둘 이상의 객체 간의 관계를 나타내며, 소유권 개념은 해당되지 않는다.
+    * 합성\(composition\) 타입 : 집합의 특수한 타입이다. 컨테이너 객체가 파괴되면 연관된 객체 또한 소멸된다\('~ 의 부분'으로도 생각 할 수 있다\) ex\) Human 객체와 Leg / Head 등등 주요 부위와의 관계 --&gt; 사람의 팔, 사람의 머리로 고려할 수 있다
+* 계층 구조\(Is - a 관계\) : 클래스와 인터페이스 두 가지 형태를 지니고 있으며, 단방향으로 향하는 관계이다. ex\) 자전거는 운송수단이다.\(O\), 운송수단은 자전거이다.\(X\) --&gt; 단방향 관계     **계층 구조는 합성과 연계**가 가능하다. 자전거는 운송수단이며\(계층 구조\), 바퀴를 가지고 있다\(합성\).
 
 ## 클래스 델리게이션
 
+* 델리게이션 패턴\(Delegation pattern\) : 하나 이상의 메소드 호출을 다른 타입으로 전달하게 해준다. 이를 구현하기 위해선 델리게이트\(Delegate\)와 델리게이터\(Delegator\)라는 2개의 타입이 필요하다
+* 프록시 패턴\(Proxy pattern\)과 헷갈리지 않도록 주의해야 한다. 프록시 패턴은 인터페이스에 접근해 있는 동안에는 이를 완벽하게 제거하기 위해 인스턴스를 위한 플레이스홀더\(placeholder\)를 제공하는 것을 의미한다.
+
 ## 봉인 클래스
 
+봉인 클래스\(Sealed class\)는 추상 클래스로, 서브클래스를 봉인 클래스 자신 내부에 중첩 클래스로 정의함으로써 확장할 수 있다. 이를 통해 마치 열거형과 마찬가지로 봉인 클래스 계층 구조 역시 선택 가능한 고정된 집합을 갖는다.
+
+열거형 : 하나의 인스턴스에서 각 옵션을 나타낸다  
+봉인 클래스 : 파생된 클래스는 다수의 인스턴스를 가질 수 있다.
+
+따라서 봉인클래스는 대수적 자료형\(algebraic data type\)을 나타내기에 알맞다.
+
+```kotlin
+// BinaryTree = 아무것도 없는 Node 
+// BinaryTree = 왼쪽 노드와 오른쪽 노드가 각각 BinaryTree인 경우
+sealed class IntBinaryTree {
+    class EmptyNode : IntBinaryTree()
+    class IntBinaryTreeNode(val left: IntBinaryTree, val value: Int, val right: IntBinaryTree) : IntBinaryTree()
+}
+
+// when 표현식을 사용하여 컴파일러가 상태를 추론하고 모든 경우의 수를 다룰 수 있게 해준다.
+fun toCollection(tree : IntBinaryTree): Collection<Int> = when(tree) {
+    is IntBinaryTree.EmptyNode -> emptyList<Int>()
+    is IntBinaryTree.IntBinaryTreeNode -> 
+        toCollection(tree.left) 
+        + tree.value 
+        + toCollection(tree.right)
+}
+```
+
 ## 요약
+
+소프트웨어 설계 접근법의 핵심 개념을 알고 코틀린에서 사용 가능한 새로운 기능위주로 소개,
+
+항상 객체 지향적인 코드를 작성하며 코드를 좀 더 체계적이고 가독성 좋게 만들어야 한다.   
+표준 방안은 없지만, **상속보다 합성을 항상 고려**해야 한다. **항상 단순함을 유지하도록 노력**해야 하며, 계층 구조를 작성할 때도 똑같이 단순함을 유지해야 한다.
 
