@@ -16,7 +16,7 @@
 
 ## Framework
 
-* [Spring](framework/spring.md)
+* [Spring Framework](framework/spring.md)
 
 ## Algorithm
 
