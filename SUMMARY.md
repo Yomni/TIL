@@ -32,10 +32,11 @@
   * [8. Greedy Algorithm](algorithm/undefined/8.-greedy-algorithm.md)
   * [9. Graph Algorithm](algorithm/undefined/9.-graph-algorithm.md)
 * [알고리즘 문제 풀이](algorithm/undefined-1/README.md)
-  * [\[프로그래머스\] 두 개 뽑아서 더하기](algorithm/undefined-1/undefined.md)
-  * [\[프로그래머스\] 크레인 인형뽑기 게임](algorithm/undefined-1/undefined-1.md)
-  * [\[프로그래머스\] 내적](algorithm/undefined-1/undefined-3.md)
-  * [\[프로그래머스\] 소수 만들기](algorithm/undefined-1/undefined-2.md)
+  * [\[프로그래머스\] 두 개 뽑아서 더하기](algorithm/undefined-1/solve1.md)
+  * [\[프로그래머스\] 크레인 인형뽑기 게임](algorithm/undefined-1/solve2.md)
+  * [\[프로그래머스\] 내적](algorithm/undefined-1/solve3.md)
+  * [\[프로그래머스\] 소수 만들기](algorithm/undefined-1/solve4.md)
+  * [\[프로그래머스\] 키패드 누르기](algorithm/undefined-1/undefined.md)
 
 ## Computer Science
 
