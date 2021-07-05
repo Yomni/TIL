@@ -64,13 +64,144 @@ object Rectangle {
 
 ## 지역 함수
 
-## 최상위 함수
+코틀린에서 **다른 함수 내부에 함수를 선언**하도록 지원한다. 이를 통해 **반복적인 작업을 더욱 효율적으로 쪼갤** 수 있다. 이런 함수를 **지역\(local\) 함수 또는 중첩\(nested\) 함수**라 부른다. 함수는 여러 번 중첩될 수도 있다.
+
+```kotlin
+fun printArea(width: Int, height: Int): Unit {
+    fun calculateArea(): Int = width * height
+    val area = calculateArea(width,height)
+    println("The area is $area")
+}
+
+// fizz buzz : 시작 값부터 마지막 값까지 정수를 출력하는 것, 
+// fizz : 3의 배수인 정수인 경우
+// buzz : 5의 배수인 정수인 경우
+// fizz & buzz : 3과 5의 공배수인 경우
+fun fizzbizz(start: Int, end: Int): Unit {
+    for (k in start..end) {
+        
+        fun isFizz(): Boolean = k % 3 == 0
+        fun isBuzz(): Boolean = k % 5 == 0
+        
+        when {
+            isFizz() && isBuzz() -> println("Fizz Buzz")
+            isFizz() -> println("Fizz")
+            isBuzz() -> println("Buzz")
+            else -> println(k)
+        }
+    }
+}
+```
+
+장점
+
+1. 스코프 바깥에 선언한 매개변수나 변수에 접근 가능
+2. for 루프나 while루프, 그 밖의 블록 내부에도 정의할 수 있다.
+
+## 최상위 함수\(top - level\)
+
+최상위 함수\(top - level\)는 클래스, 객체 또는 인터페이스 바깥에 존재하는 함수이며 파일 내부에서 바로 정의하는 함수이다. 주로 도우미 함수나 유틸리티 함수를 정의하는 데 유용하다. 
+
+자바에서는 객체가 아무런 값을 가지지 않는 경우에는 도우미 클래스 내에 정적 함수 형태로 존재한다.\(예를 들어, 자바 표준 라이브러리에 있는 컬렉션 함수 같은 경우...\)
+
+몇몇 함수는 독립적으로 사용하는 경우가 있다.  
+ex\) require, check, error, requireNotNull, Assertions ...
+
+```kotlin
+// require : 함수가 호출 됐을 때 매개변수가 불변 조건을 만족함을 보장하는 데 사용
+fun foo(k : Int) {
+    // 매개 변수가 항상 10보다 커야하는 경우를 보장
+    require(k > 10, {"k should be greater than 10"} )
+}
+```
 
 ## 이름이 있는 매개변수
 
+이름이 있는 매개변수\(named parameter\)는 함수에 인자를 전달할 때 인자에 이름을 명시할 수 있게 해준다. 매개변수가 여러 개인 함수의 경우, 명시적으로 이름을 붙이면 각 인자의 의도가 명확해진다는 장점이 있다. 이는 호출하는 쪽에서 코드를 좀 더 읽기 쉽게 해준다.
+
+```kotlin
+// 첫 번째 문자열이 두 번째 문자열의 일부를 포함하는지를 확인
+val string = "a kindness of ravens"
+string.regionMatches(thisOffset = 14, other = "Red Ravens", 
+    otherOffset = 4, length = 6, ignoreCase = true)
+    
+// 호출자에 맞춰 매개변수 순서를 변경하는 것도 허용
+val string = "a kindness of ravens"
+string.endsWith(suffix = "ravens", ignoreCase = true)
+string.endsWith(ignoreCase = true, suffix = "ravens")
+```
+
+이름이 있는 매개변수가 왜 유용한지는 '기본 값을 갖는 매개변수'의 경우에서 확인할 수 있다. 매개변수의 순서를 변경하는 것은 어떤 기본값을 오버라이딩할지를 선택할 수 있게 해준다.
+
 ## 기본 값을 갖는 매개변수
 
+자바에서는 **똑같은 동작을 하는 메서드를 오버로딩을 통해 사용자의 입맛에 맞게 매개변수의 갯수나 형태를 바꾸어 가며 사용**할 수 있다. 하지만, 다수의 매개변수는 같은 함수를 오버로딩한 다양한 변형을 갖게 되고 끝없는 보일러플레이트를 발생시킨다.  
+ex\) Java의 BigDecimal divide 메소드
+
+```java
+public BigDecimal divide(BigDecimal divisor)
+public BigDecimal divide(BigDecimal divisor, RoundingMode roundingMode)
+public BigDecimal divide(BigDecimal divisor, int scale, RoundingMode roundingMode)
+```
+
+이런 단점을 극복하고자 **코틀린에서는 기본 값을 갖는 매개변수를 제공**한다. **하나 이상의 매개변수가 기본 값을 갖도록 정의**할 수 있으며, 각 값은 인자가 지정되지 않을 경우 사용된다. 이로써 **매개변수의 종류나 형태가 다양할 경우에도 단일 함수로 정의**할 수 있도록 도와준다. 
+
+```kotlin
+fun divide(divisor: BigDecimal, scale: Int = 0, 
+    roundingMode: RoundingMode = RoundingMode.UNNECESSARY): BigDecimal
+    
+// 사용 예시
+divide(BigDecimal(12.34))
+divide(BigDecimal(12.34), 8)
+divide(BigDecimal(12.34), 8, RoundingMode.HALF_DOWN)
+
+// 다음과 같이는 사용할 수 없다
+divide(BigDecimal(12.34), RoundingMode.HALF_DOWN) // 오류
+
+// 이 때 이름이 있는 매개변수 기능으로 극복 가능
+divide(BigDecimal(12.34), roundingMode = RoundingMode.HALF_DOWN) // 정상작동
+```
+
+기본 값이 있는 매개변수는 생성자에서도 사용이 가능하다. 이를 통해 생성자 오버로딩은 필요 없게 된다. 
+
 ## 확장 함수
+
+확장 함수란 **특정 타입의 인스턴스에서 사용가능한 함수를 추가 정의\(확장\)하는 것**을 말한다.  
+예를 들어, list 컬렉션에서 reverse나 drop 같은 함수를 정의해야할 때, 자바에서는 서브 클래스를 재정의 하거나, 별도의 메소드를 구현하여 사용해야 한다.
+
+```java
+// 별도 메소드를 구현한 경우 사용
+reverse(take(3, drop(2, list)))
+```
+
+이러한 경우 가독성이 매우 떨어지며, IDE에서 제공하는 코드 완성\(code completion\)을 사용할 수 없다.
+
+만약, list 인스턴스에서 이러한 함수에 직접 접근할 수 있다면?
+
+```kotlin
+// 가독성 좋고 매우 유연하게 동작한다
+list.drop(2).take(3).reverse()
+```
+
+코틀린에선 이런 함수를 **확장 함수\(extension function\)라고 정의**한다. 또한 **확장 함수가 사용될 인스턴스 타입은 수신자 타입\(receiver type\)** 이라 불린다.  예시로 drop 함수를 list의 확장 함수로 구현한 코드이다.
+
+```kotlin
+fun <E> List<E>.drop(k: Int): List<E> {
+    val resultSize = size - k
+    when {
+        resultSize <= 0 -> return emptyList<E>()
+        else -> {
+            val list = ArrayList<E>(resultSize)
+            for (index in k..size - 1) {
+                list.add(this[index]) // this를 사용하고 있음에 주의
+            }
+            return list
+        }
+    }
+}
+```
+
+**함수 몸체에서 this 키워드**를 사용하고 있는데, 이는 **수신자 인스턴스를 참조하기 위해 사용**되며, **수신자 인스턴스란 함수가 호출되는 객체**를 말한다. 확장 함수 내부에 있을 때마다 this 키워드는 항상 수신자 인스턴스를 참조하며, 바깥 범위에 있는 인스턴스는 제한돼야 한다. 
 
 ### 확장 함수의 우선순위
 
