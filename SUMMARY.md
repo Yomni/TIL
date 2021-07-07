@@ -11,7 +11,9 @@
   * [\[Kotlin 후려치기\] 2. Kotlin 기본기](language/untitled/kotlin-2.-kotlin.md)
   * [\[Kotlin 후려치기\] 3. Kotlin 과 객체 지향 프로그래밍\(Object - Oriented Programming\)](language/untitled/kotlin-3.-kotlin.md)
   * [\[Kotlin 후려치기\] 4. Kotlin과 함수](language/untitled/kotlin-4.-kotlin.md)
-* [JavaScript](language/javascript.md)
+* [JavaScript](language/javascript/README.md)
+  * [1. 자바스크립트 개발 도구](language/javascript/1..md)
+  * [2. 리터럴과 변수, 상수, 데이터 타입](language/javascript/2..md)
 * [Java](language/java.md)
 
 ## Framework
@@ -51,5 +53,6 @@
 
 ## side-project
 
+* [Rebalancer](side-project/rebalancer.md)
 * [Papagle](side-project/papagle.md)
 

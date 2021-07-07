@@ -205,9 +205,52 @@ fun <E> List<E>.drop(k: Int): List<E> {
 
 ### 확장 함수의 우선순위
 
+확장 함수는 클래스나 인스턴스에 정의된 함수를 오버라이딩할 수 없다. 완전히 같은 시크니처로 확장 함수를 정의할 경우\(이름, 매개변수, 타입, 순서와 반환 타입까지 모두 같은 경우\) 컴파일러는 이를 절대로 호출하지 못할 것이다.
+
+따라서 확장 함수의 우선순의는 클래스나 인스턴스에 정의된 함수를 더 높게 잡고 있으며, 시그니처가 동일한 확장 함수는 절대로 호출될 수 없다. 만약 확장 함수를 정의하려면 기존 클래스나 인스턴스에 정의되지 않은 시그니처로 정의해야 한다.
+
+```kotlin
+class Submarine{
+    fun fire(): Unit {
+        println("Firing torpedoes")
+    }
+    
+    fun submerge(): Unit {
+        println("Submerging")
+    }
+}
+
+// 시그니처가 기존 클래스와 동일하기 때문에 
+// 이 확장 함수는 절대로 호출될 일 없다.
+fun Submarine.fire(): Unit {
+    println("Fire on board!")
+}
+
+fun Submarine.submerge(depth: Int): Unit {
+    println("Submerging to a depth of $depth fathoms")
+}
+
+val sub = Submarine()
+sub.fire() // Firing torpedoes
+sub.submerge() // Submerging
+sub.submerge(10) // Submerging to a depth of 10 fathoms
+```
+
 ### 널 값에서의 확장 함수
 
+널 값에서도 확장 함수를 지원한다. 이러한 상황에서는 참조가 널 값을 갖게 되므로 널 참조를 안전하게 처리하지 못하는 Any 함수는 널 포인터 익셉션을 발생시킬 것이다. 아래 기능은 널 값을 갖더라도 안전하게 사용할 수 있도록 equals 함수를 오버로딩하는 방법을 보여준다.
+
+```kotlin
+fun Any?safeEquals(other: Any?): Boolean {
+    if (this == null && other == null) return ture
+    if (this == null) return false
+    return this.equals(other)
+}
+```
+
 ### 멤버 확장 함수
+
+
 
 ### 멤버 확장 함수 오버라이딩 하기
 
