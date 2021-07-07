@@ -18,6 +18,9 @@
 
 ## Framework
 
+* [Spring Boot](framework/spring-boot/README.md)
+  * [JPA](framework/spring-boot/jpa.md)
+  * [Lombok](framework/spring-boot/lombok.md)
 * [Spring Framework](framework/spring/README.md)
   * [1. 스프링과 웹 애플리케이션](framework/spring/1..md)
 
