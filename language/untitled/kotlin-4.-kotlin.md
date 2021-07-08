@@ -250,7 +250,22 @@ fun Any?safeEquals(other: Any?): Boolean {
 
 ### 멤버 확장 함수
 
+확장 함수는 일반적으로 최상위 단계에 선언하지만, 클래스 내부에 멤버로 선언하여 확장 함수의 범위를 제한할 수도 있다.
 
+```kotlin
+class Mappings {
+    private val map = hashMapOf<Int, String> ()
+    private fun String.stringAdd(): Unit {
+        // hashCode()는 Mappings의 인스턴스도 가지고 있는 함수(dispatch receiver)
+        // 문자열 인스턴스에서도 가지고 있는 함수(extension receiver)
+        map.put(this@Mappings.hashCode(), this)
+    }
+    
+    fun add(str: String): Unit = str.stringAdd()
+}
+```
+
+* hashCode 함수는 Any에 정의되어 있으므로, Mappings의 인스턴스도 String의 인스턴스도 모두 가지고 있는 함수이다. 이 때, Mappings의 hashCode 함수는 **디스패치 수신자\(dispatch receiver\)** 라고 하며, String 인스턴스의 HashCode 함수는 **확장 수신자\(extension receiver\)**라고 한다.
 
 ### 멤버 확장 함수 오버라이딩 하기
 
