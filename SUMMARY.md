@@ -18,9 +18,12 @@
 
 ## Framework
 
-* [Spring Boot](framework/spring-boot/README.md)
-  * [JPA](framework/spring-boot/jpa.md)
-  * [Lombok](framework/spring-boot/lombok.md)
+* [Spring Boot\(draft\)](framework/spring-boot/README.md)
+  * [Dependencies](framework/spring-boot/dependencies/README.md)
+    * [Lombok](framework/spring-boot/dependencies/lombok.md)
+    * [H2](framework/spring-boot/dependencies/h2.md)
+    * [Thymeleaf](framework/spring-boot/dependencies/thymeleaf.md)
+    * [Spring Data JPA](framework/spring-boot/dependencies/jpa.md)
 * [Spring Framework](framework/spring/README.md)
   * [1. 스프링과 웹 애플리케이션](framework/spring/1..md)
 
@@ -43,16 +46,16 @@
   * [\[프로그래머스\] 소수 만들기](algorithm/undefined-1/solve4.md)
   * [\[프로그래머스\] 키패드 누르기](algorithm/undefined-1/undefined.md)
 
-## Computer Science
-
-* [Computer Network](computer-science/untitled/README.md)
-  * [1. 인터넷이란 무엇인가?](computer-science/untitled/1..md)
-
 ## Infra
 
 * [Docker](infra/docker/README.md)
   * [1. Docker 설치하기](infra/docker/mac-silicon-m1-docker.md)
 * [Kubernetes](infra/kubernetes.md)
+
+## Computer Science
+
+* [Computer Network](computer-science/untitled/README.md)
+  * [1. 인터넷이란 무엇인가?](computer-science/untitled/1..md)
 
 ## side-project
 
